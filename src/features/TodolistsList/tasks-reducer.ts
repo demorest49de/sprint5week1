@@ -93,8 +93,8 @@ export const addTaskTC =
       })
   }
 export const updateTaskTC =
-  (taskId: string, domainModel: UpdateDomainTaskModelType, todolistId: string) =>
-  (dispatch: ThunkDispatch, getState: () => AppRootStateType) => {
+  (taskId: string, domainModel: UpdateDomainTaskModelType, todolistId: string): AppThunk =>
+  (dispatch, getState: () => AppRootStateType) => {
     const state = getState()
     const task = state.tasks[todolistId].find((t) => t.id === taskId)
     if (!task) {
@@ -148,5 +148,4 @@ type ActionsType =
   | RemoveTodolistActionType
   | SetTodolistsActionType
   | ReturnType<typeof setTasksAC>
-type ThunkDispatch = Dispatch<ActionsType>
 //#endregion
