@@ -3,7 +3,6 @@ import { Dispatch } from "@reduxjs/toolkit"
 import { appActions, RequestStatusType } from "app/app-reducer"
 import { handleServerNetworkError } from "utils/error-utils"
 import { AppThunk } from "app/store"
-import App from "app/App"
 
 const initialState: Array<TodolistDomainType> = []
 
@@ -111,4 +110,3 @@ export type TodolistDomainType = TodolistType & {
   filter: FilterValuesType
   entityStatus: RequestStatusType
 }
-type ThunkDispatch = Dispatch<ActionsType>

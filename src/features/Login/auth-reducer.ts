@@ -16,7 +16,7 @@ const slice = createSlice({
   },
 })
 
-// thunks
+//#region thunks
 export const loginTC =
   (data: LoginParamsType): AppThunk =>
   (dispatch) => {
@@ -52,6 +52,7 @@ export const logoutTC = (): AppThunk => (dispatch) => {
       handleServerNetworkError(error, dispatch)
     })
 }
+//#endregion thunks
 
 export const authReducer = slice.reducer
 export const authActions = slice.actions
