@@ -58,7 +58,7 @@ export const logoutTC = () => (dispatch: Dispatch<ActionsType | SetAppStatusActi
     .logout()
     .then((res) => {
       if (res.data.resultCode === 0) {
-        dispatch(setIsLoggedInAC(false))
+        dispatch(authActions.setIsLoggedIn({ isLoggedIn: false }))
         dispatch(setAppStatusAC("succeeded"))
       } else {
         handleServerAppError(res.data, dispatch)
