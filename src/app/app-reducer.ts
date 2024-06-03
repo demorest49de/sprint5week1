@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit"
+import { createSlice, Dispatch, PayloadAction } from "@reduxjs/toolkit"
 import { authActions } from "features/Login/auth-reducer"
 import { authAPI } from "api/todolists-api"
 
