@@ -5,7 +5,7 @@ import { handleServerNetworkError } from "utils/error-utils"
 import { AppThunk } from "app/store"
 
 const initialState: Array<TodolistDomainType> = []
-
+// TODO https://youtu.be/ZEt93Jh10Ak?t=6089
 export const todolistsReducer = (
   state: Array<TodolistDomainType> = initialState,
   action: ActionsType,
