@@ -1,4 +1,8 @@
-import { AddTodolistActionType, RemoveTodolistActionType, SetTodolistsActionType } from "./todolists-reducer"
+import {
+  AddTodolistActionType,
+  RemoveTodolistActionType,
+  SetTodolistsActionType,
+} from "features/TodolistsList/todolists-slice"
 import { TaskPriorities, TaskStatuses, TaskType, todolistsAPI, UpdateTaskModelType } from "api/todolists-api"
 import { AppRootStateType, AppThunk } from "app/store"
 import { handleServerAppError, handleServerNetworkError } from "utils/error-utils"

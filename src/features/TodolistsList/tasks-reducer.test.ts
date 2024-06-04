@@ -1,5 +1,5 @@
 import { addTaskAC, removeTaskAC, setTasksAC, tasksReducer, TasksStateType, updateTaskAC } from "./tasks-reducer"
-import { addTodolistAC, removeTodolistAC, setTodolistsAC } from "./todolists-reducer"
+import { addTodolistAC, removeTodolistAC, setTodolistsAC } from "features/TodolistsList/todolists-slice"
 import { TaskPriorities, TaskStatuses } from "api/todolists-api"
 
 let startState: TasksStateType = {}

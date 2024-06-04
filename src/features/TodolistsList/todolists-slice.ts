@@ -3,10 +3,11 @@ import { Dispatch } from "@reduxjs/toolkit"
 import { appActions, RequestStatusType } from "app/app-reducer"
 import { handleServerNetworkError } from "utils/error-utils"
 import { AppThunk } from "app/store"
+import { mm } from "temp/temp"
 
 const initialState: Array<TodolistDomainType> = []
-// TODO https://youtu.be/ZEt93Jh10Ak?t=6089
-export const todolistsReducer = (
+
+export const todolistsSlice = (
   state: Array<TodolistDomainType> = initialState,
   action: ActionsType,
 ): Array<TodolistDomainType> => {
