@@ -9,7 +9,7 @@ import {
   FilterValuesType,
   removeTodolistTC,
   TodolistDomainType,
-} from "features/TodolistsList/todolists-slice"
+} from "features/TodolistsList/todolists-reducer"
 import { addTaskTC, removeTaskTC, TasksStateType, updateTaskTC } from "./tasks-reducer"
 import { TaskStatuses } from "api/todolists-api"
 import { Grid, Paper } from "@mui/material"

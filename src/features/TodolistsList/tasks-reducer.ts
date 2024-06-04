@@ -2,7 +2,7 @@ import {
   AddTodolistActionType,
   RemoveTodolistActionType,
   SetTodolistsActionType,
-} from "features/TodolistsList/todolists-slice"
+} from "features/TodolistsList/todolists-reducer"
 import { TaskPriorities, TaskStatuses, TaskType, todolistsAPI, UpdateTaskModelType } from "api/todolists-api"
 import { AppRootStateType, AppThunk } from "app/store"
 import { handleServerAppError, handleServerNetworkError } from "utils/error-utils"
