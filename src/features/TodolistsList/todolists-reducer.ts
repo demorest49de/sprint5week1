@@ -34,34 +34,28 @@ const slice = createSlice({
         state[index].filter = action.payload.filter
       }
     },
+    changeTodolistEntityStatus: (state, action: PayloadAction<{ id: string; status: RequestStatusType }>) => {
+      const index = state.findIndex((todo) => todo.id === action.payload.id)
+      if (index !== -1) {
+        state[index].entityStatus = action.payload.status
+      }
+    },
+    setTodolists: (state, action: PayloadAction<{ todolists: TodolistType[] }>) => {
+      return action.payload.todolists.map((tl) => ({ ...tl, filter: "all", entityStatus: "idle" }))
+    },
   },
 })
 
-const initialState: Array<TodolistDomainType> = []
+// const initialState: Array<TodolistDomainType> = []
 
-export const _todolistsReducer = (
-  state: Array<TodolistDomainType> = initialState,
-  action: ActionsType,
-): Array<TodolistDomainType> => {
-  switch (action.type) {
-    case "CHANGE-TODOLIST-FILTER":
-      return state.map((tl) => (tl.id === action.id ? { ...tl, filter: action.filter } : tl))
-    case "CHANGE-TODOLIST-ENTITY-STATUS":
-      return state.map((tl) => (tl.id === action.id ? { ...tl, entityStatus: action.status } : tl))
-    case "SET-TODOLISTS":
-      return action.todolists.map((tl) => ({ ...tl, filter: "all", entityStatus: "idle" }))
-    default:
-      return state
-  }
-}
+// export const _todolistsReducer = (
+//   state: Array<TodolistDomainType> = initialState,
+//   action: ActionsType,
+// ): Array<TodolistDomainType> => {
+//
+// }
 
 // actions
-export const changeTodolistEntityStatusAC = (id: string, status: RequestStatusType) =>
-  ({
-    type: "CHANGE-TODOLIST-ENTITY-STATUS",
-    id,
-    status,
-  }) as const
 export const setTodolistsAC = (todolists: Array<TodolistType>) => ({ type: "SET-TODOLISTS", todolists }) as const
 
 // thunks
@@ -107,16 +101,16 @@ export const changeTodolistTitleTC = (id: string, title: string) => {
 }
 
 // types
-export type AddTodolistActionType = ReturnType<typeof addTodolistAC>
-export type RemoveTodolistActionType = ReturnType<typeof removeTodolistAC>
-export type SetTodolistsActionType = ReturnType<typeof setTodolistsAC>
-type ActionsType =
-  | RemoveTodolistActionType
-  | AddTodolistActionType
-  | ReturnType<typeof changeTodolistTitleAC>
-  | ReturnType<typeof changeTodolistFilterAC>
-  | SetTodolistsActionType
-  | ReturnType<typeof changeTodolistEntityStatusAC>
+// export type AddTodolistActionType = ReturnType<typeof addTodolistAC>
+// export type RemoveTodolistActionType = ReturnType<typeof removeTodolistAC>
+// export type SetTodolistsActionType = ReturnType<typeof setTodolistsAC>
+// type ActionsType =
+//   | RemoveTodolistActionType
+//   | AddTodolistActionType
+//   | ReturnType<typeof changeTodolistTitleAC>
+//   | ReturnType<typeof changeTodolistFilterAC>
+//   | SetTodolistsActionType
+//   | ReturnType<typeof changeTodolistEntityStatusAC>
 export type FilterValuesType = "all" | "active" | "completed"
 export type TodolistDomainType = TodolistType & {
   filter: FilterValuesType
