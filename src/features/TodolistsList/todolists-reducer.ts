@@ -1,5 +1,5 @@
 import { todolistsAPI, TodolistType } from "api/todolists-api"
-import { createSlice, Dispatch, PayloadAction } from "@reduxjs/toolkit"
+import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { appActions, RequestStatusType } from "app/app-reducer"
 import { handleServerNetworkError } from "utils/error-utils"
 import { AppThunk } from "app/store"
