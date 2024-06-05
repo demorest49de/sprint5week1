@@ -1,6 +1,6 @@
-import { addTaskAC, removeTaskAC, setTasksAC, tasksReducer, TasksStateType, updateTaskAC } from "./tasks-reducer"
-import { addTodolistAC, removeTodolistAC, setTodolistsAC } from "features/TodolistsList/todolists-reducer"
+import { addTaskAC, removeTaskTC, setTasksAC, tasksReducer, TasksStateType, updateTaskAC } from "./tasks-reducer"
 import { TaskPriorities, TaskStatuses } from "api/todolists-api"
+import { todolistsActions } from "features/TodolistsList/todolists-reducer"
 
 let startState: TasksStateType = {}
 beforeEach(() => {
@@ -85,7 +85,7 @@ beforeEach(() => {
 })
 
 test("correct task should be deleted from correct array", () => {
-  const action = removeTaskAC("2", "todolistId2")
+  const action = removeTaskTC("2", "todolistId2")
 
   const endState = tasksReducer(startState, action)
 
@@ -133,12 +133,13 @@ test("title of specified task should be changed", () => {
   expect(endState["todolistId2"][0].title).toBe("bread")
 })
 test("new array should be added when new todolist is added", () => {
-  const action = addTodolistAC({
+  const todolist = {
     id: "blabla",
     title: "new todolist",
     order: 0,
     addedDate: "",
-  })
+  }
+  const action = todolistsActions.addTodolist({ todolist })
 
   const endState = tasksReducer(startState, action)
 
@@ -152,7 +153,7 @@ test("new array should be added when new todolist is added", () => {
   expect(endState[newKey]).toEqual([])
 })
 test("propertry with todolistId should be deleted", () => {
-  const action = removeTodolistAC("todolistId2")
+  const action = todolistsActions.removeTodolist({ id: "todolistId2" })
 
   const endState = tasksReducer(startState, action)
 
@@ -163,10 +164,11 @@ test("propertry with todolistId should be deleted", () => {
 })
 
 test("empty arrays should be added when we set todolists", () => {
-  const action = setTodolistsAC([
+  const todolists = [
     { id: "1", title: "title 1", order: 0, addedDate: "" },
     { id: "2", title: "title 2", order: 0, addedDate: "" },
-  ])
+  ]
+  const action = todolistsActions.setTodolists({ todolists })
 
   const endState = tasksReducer({}, action)
 

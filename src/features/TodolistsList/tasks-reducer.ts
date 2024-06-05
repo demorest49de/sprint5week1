@@ -1,8 +1,3 @@
-import {
-  AddTodolistActionType,
-  RemoveTodolistActionType,
-  SetTodolistsActionType,
-} from "features/TodolistsList/todolists-reducer"
 import { TaskPriorities, TaskStatuses, TaskType, todolistsAPI, UpdateTaskModelType } from "api/todolists-api"
 import { AppRootStateType, AppThunk } from "app/store"
 import { handleServerAppError, handleServerNetworkError } from "utils/error-utils"
@@ -33,7 +28,7 @@ export const tasksReducer = (state: TasksStateType = initialState, action: Actio
       return copyState
     case "SET-TODOLISTS": {
       const copyState = { ...state }
-      action.todolists.forEach((tl) => {
+      action.todolists.forEach((tl: any) => {
         copyState[tl.id] = []
       })
       return copyState
@@ -71,7 +66,7 @@ export const fetchTasksTC =
 export const removeTaskTC =
   (taskId: string, todolistId: string): AppThunk =>
   (dispatch: Dispatch<ActionsType>) => {
-    todolistsAPI.deleteTask(todolistId, taskId).then((res) => {
+    todolistsAPI.deleteTask(todolistId, taskId).then(() => {
       const action = removeTaskAC(taskId, todolistId)
       dispatch(action)
     })
@@ -148,8 +143,6 @@ type ActionsType =
   | ReturnType<typeof removeTaskAC>
   | ReturnType<typeof addTaskAC>
   | ReturnType<typeof updateTaskAC>
-  | AddTodolistActionType
-  | RemoveTodolistActionType
-  | SetTodolistsActionType
   | ReturnType<typeof setTasksAC>
+  | any
 //#endregion
