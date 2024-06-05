@@ -1,13 +1,61 @@
-import { TaskPriorities, TaskStatuses, TaskType, todolistsAPI, UpdateTaskModelType } from "api/todolists-api"
+import {
+  TaskPriorities,
+  TaskStatuses,
+  TaskType,
+  todolistsAPI,
+  TodolistType,
+  UpdateTaskModelType,
+} from "api/todolists-api"
 import { AppRootStateType, AppThunk } from "app/store"
 import { handleServerAppError, handleServerNetworkError } from "utils/error-utils"
-import { Dispatch } from "@reduxjs/toolkit"
+import { createSlice, Dispatch, PayloadAction } from "@reduxjs/toolkit"
 import { appActions } from "app/app-reducer"
+import { todolistsActions } from "features/TodolistsList/todolists-reducer"
+
+const slice = createSlice({
+  name: "tasks",
+  initialState: {} as TasksStateType,
+  reducers: {
+    removeTask: (state, action: PayloadAction<{ taskId: string; todolistId: string }>) => {
+      const tasks = state[action.payload.todolistId]
+      const index = tasks.findIndex((t) => t.id === action.payload.taskId)
+      if (index !== -1) tasks.splice(index, 1)
+    },
+    addTask: (state, action: PayloadAction<{ task: TaskType }>) => {
+      const tasks = state[action.payload.task.todoListId]
+      tasks.unshift(action.payload.task)
+    },
+    updateTaskAC: (
+      state,
+      action: PayloadAction<{ taskId: string; model: UpdateDomainTaskModelType; todolistId: string }>,
+    ) => {
+      const tasks = state[action.payload.todolistId]
+      const index = tasks.findIndex((t) => t.id === action.payload.taskId)
+      if (index !== -1) {
+        tasks[index] = { ...tasks[index], ...action.payload.model }
+      }
+    },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(todolistsActions.addTodolist, (state, action) => {
+        state[action.payload.todolist.id] = []
+      })
+      .addCase(todolistsActions.removeTodolist, (state, action) => {
+        delete state[action.payload.id]
+      })
+      .addCase(todolistsActions.setTodolists, (state, action) => {
+        action.payload.todolists.forEach((tl: any) => {
+          state[tl.id] = []
+        })
+      })
+  },
+})
 
 const initialState: TasksStateType = {}
 
 //#region reducer
-export const tasksReducer = (state: TasksStateType = initialState, action: ActionsType): TasksStateType => {
+export const _tasksReducer = (state: TasksStateType = initialState, action: ActionsType): TasksStateType => {
   switch (action.type) {
     case "REMOVE-TASK":
       return { ...state, [action.todolistId]: state[action.todolistId].filter((t) => t.id != action.taskId) }
@@ -20,6 +68,9 @@ export const tasksReducer = (state: TasksStateType = initialState, action: Actio
           t.id === action.taskId ? { ...t, ...action.model } : t,
         ),
       }
+    case "SET-TASKS":
+      return { ...state, [action.todolistId]: action.tasks }
+
     case "ADD-TODOLIST":
       return { ...state, [action.todolist.id]: [] }
     case "REMOVE-TODOLIST":
@@ -33,8 +84,6 @@ export const tasksReducer = (state: TasksStateType = initialState, action: Actio
       })
       return copyState
     }
-    case "SET-TASKS":
-      return { ...state, [action.todolistId]: action.tasks }
     default:
       return state
   }
@@ -146,3 +195,6 @@ type ActionsType =
   | ReturnType<typeof setTasksAC>
   | any
 //#endregion
+
+export const tasksReducer = slice.reducer
+export const tasksActions = slice.actions
