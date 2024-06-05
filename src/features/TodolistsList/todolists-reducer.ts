@@ -16,12 +16,7 @@ const slice = createSlice({
       }
     },
     addTodolist: (state, action: PayloadAction<{ todolist: TodolistType }>) => {
-      // return [{ ...action.todolist, filter: "all", entityStatus: "idle" }, ...state]
-      state.unshift({
-        ...action.payload.todolist,
-        filter: "all",
-        entityStatus: "idle",
-      })
+      state.unshift({ ...action.payload.todolist, filter: "all", entityStatus: "idle" })
     },
     changeTodolistTitle: (state, action: PayloadAction<{ id: string; title: string }>) => {
       // return state.map((tl) => (tl.id === action.payload.id ? { ...tl, title: action.payload.title } : tl))

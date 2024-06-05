@@ -56,6 +56,7 @@ export const fetchTasksTC =
     dispatch(appActions.setAppStatus({ status: "loading" }))
     todolistsAPI.getTasks(todolistId).then((res) => {
       const tasks = res.data.items
+      console.log(" tasks: ", tasks)
       dispatch(tasksActions.setTasks({ tasks, todolistId }))
       dispatch(appActions.setAppStatus({ status: "succeeded" }))
     })
