@@ -9,8 +9,7 @@ const slice = createSlice({
   initialState: [] as TodolistDomainType[],
   reducers: {
     removeTodolist: (state, action: PayloadAction<{ id: string }>) => {
-      // return state.filter((tl) => tl.id != action.payload.id)
-      const index = state.findIndex((todo) => todo.id === "id1")
+      const index = state.findIndex((todo) => todo.id === action.payload.id)
       if (index !== -1) {
         state.splice(index, 1)
       }
@@ -35,10 +34,13 @@ const slice = createSlice({
         state[index].entityStatus = action.payload.status
       }
     },
+
     setTodolists: (state, action: PayloadAction<{ todolists: TodolistType[] }>) => {
-      // return action.payload.todolists.map((tl) => ({ ...tl, filter: "all", entityStatus: "idle" }))
-      return action.payload.todolists.forEach((t) => {
-        state.push({ ...t, filter: "all", entityStatus: "idle" })
+      console.log("setTodolists")
+      console.log("action.payload.todolists", action.payload.todolists)
+
+      return action.payload.todolists.map((t) => {
+        return { ...t, filter: "all", entityStatus: "idle" }
       })
     },
   },
@@ -51,6 +53,7 @@ export const fetchTodolistsTC = (): AppThunk => {
     todolistsAPI
       .getTodolists()
       .then((res) => {
+        console.log("fetchTodolistsTC")
         dispatch(todolistsActions.setTodolists({ todolists: res.data }))
         dispatch(appActions.setAppStatus({ status: "succeeded" }))
       })
@@ -59,6 +62,7 @@ export const fetchTodolistsTC = (): AppThunk => {
       })
   }
 }
+
 export const removeTodolistTC = (todolistId: string): AppThunk => {
   return (dispatch) => {
     dispatch(appActions.setAppStatus({ status: "loading" }))

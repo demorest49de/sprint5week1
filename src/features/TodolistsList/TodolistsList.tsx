@@ -27,6 +27,8 @@ export const TodolistsList: React.FC<PropsType> = ({ demo = false }) => {
   const tasks = useSelector<AppRootStateType, TasksStateType>((state) => state.tasks)
   const isLoggedIn = useSelector<AppRootStateType, boolean>((state) => state.auth.isLoggedIn)
 
+  console.log(" todolists: ", todolists)
+
   const dispatch = useAppDispatch()
 
   useEffect(() => {

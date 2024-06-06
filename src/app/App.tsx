@@ -19,6 +19,7 @@ import {
   Typography,
 } from "@mui/material"
 import { Menu } from "@mui/icons-material"
+import One from "temp/one"
 
 type PropsType = {
   demo?: boolean
@@ -26,9 +27,13 @@ type PropsType = {
 
 function App({ demo = false }: PropsType) {
   const status = useSelector<AppRootStateType, RequestStatusType>((state) => state.app.status)
-  const isInitialized = useSelector<AppRootStateType, boolean>((state) => state.app.isInitialized)
+  const isMeLoading = useSelector<AppRootStateType, boolean>((state) => state.app.isInitialized)
   const isLoggedIn = useSelector<AppRootStateType, boolean>((state) => state.auth.isLoggedIn)
   const dispatch = useDispatch<any>()
+
+  //One()
+
+  console.log("app")
 
   useEffect(() => {
     dispatch(initializeAppTC())
@@ -38,7 +43,7 @@ function App({ demo = false }: PropsType) {
     dispatch(logoutTC())
   }, [])
 
-  if (!isInitialized) {
+  if (!isMeLoading) {
     return (
       <div style={{ position: "fixed", top: "30%", textAlign: "center", width: "100%" }}>
         <CircularProgress />

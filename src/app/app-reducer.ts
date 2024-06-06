@@ -1,6 +1,7 @@
 import { createSlice, Dispatch, PayloadAction } from "@reduxjs/toolkit"
 import { authActions } from "features/Login/auth-reducer"
 import { authAPI } from "api/todolists-api"
+import { AppThunk } from "app/store"
 
 export type RequestStatusType = "idle" | "loading" | "succeeded" | "failed"
 
@@ -24,14 +25,18 @@ const slice = createSlice({
   },
 })
 
-export const initializeAppTC = () => (dispatch: Dispatch) => {
-  authAPI.me().then((res) => {
-    if (res.data.resultCode === 0) {
-      dispatch(authActions.setIsLoggedIn({ isLoggedIn: true }))
-    } else {
-    }
-    dispatch(appActions.setAppInitialized({ isInitialized: true }))
-  })
+export const initializeAppTC = (): AppThunk => (dispatch) => {
+  authAPI
+    .me()
+    .then((res) => {
+      if (res.data.resultCode === 0) {
+        dispatch(authActions.setIsLoggedIn({ isLoggedIn: true }))
+      } else {
+      }
+    })
+    .finally(() => {
+      dispatch(appActions.setAppInitialized({ isInitialized: true }))
+    })
 }
 
 export const appReducer = slice.reducer
