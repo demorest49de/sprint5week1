@@ -1,8 +1,9 @@
 import { todolistsAPI, TodolistType } from "api/todolists-api"
-import { createSlice, PayloadAction } from "@reduxjs/toolkit"
+import { createSlice, Dispatch, PayloadAction } from "@reduxjs/toolkit"
 import { appActions, RequestStatusType } from "app/app-reducer"
 import { handleServerNetworkError } from "utils/error-utils"
 import { AppThunk } from "app/store"
+import { fetchTasksTC, tasksActions } from "features/TodolistsList/tasks-reducer"
 
 const slice = createSlice({
   name: "todolists",
@@ -18,7 +19,6 @@ const slice = createSlice({
       state.unshift({ ...action.payload.todolist, filter: "all", entityStatus: "idle" })
     },
     changeTodolistTitle: (state, action: PayloadAction<{ id: string; title: string }>) => {
-      // return state.map((tl) => (tl.id === action.payload.id ? { ...tl, title: action.payload.title } : tl))
       const index = state.findIndex((todo) => todo.id === action.payload.id)
       if (index !== -1) state[index].title = action.payload.title
     },
@@ -48,7 +48,7 @@ const slice = createSlice({
 
 // thunks
 export const fetchTodolistsTC = (): AppThunk => {
-  return (dispatch) => {
+  return (dispatch: any) => {
     dispatch(appActions.setAppStatus({ status: "loading" }))
     todolistsAPI
       .getTodolists()
@@ -56,6 +56,12 @@ export const fetchTodolistsTC = (): AppThunk => {
         console.log("fetchTodolistsTC")
         dispatch(todolistsActions.setTodolists({ todolists: res.data }))
         dispatch(appActions.setAppStatus({ status: "succeeded" }))
+        return res.data
+      })
+      .then((data) => {
+        data.forEach((todo) => {
+          dispatch(fetchTasksTC(todo.id))
+        })
       })
       .catch((error) => {
         handleServerNetworkError(error, dispatch)
