@@ -31,6 +31,9 @@ const slice = createSlice({
     setTasks: (state, action: PayloadAction<{ tasks: Array<TaskType>; todolistId: string }>) => {
       state[action.payload.todolistId] = action.payload.tasks
     },
+    clearTasks: () => {
+      return {}
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -54,7 +57,7 @@ export const fetchTasksTC = (todolistId: string) => (dispatch: Dispatch) => {
   dispatch(appActions.setAppStatus({ status: "loading" }))
   todolistsAPI.getTasks(todolistId).then((res) => {
     const tasks = res.data.items
-    console.log("tasks", tasks)
+
     dispatch(tasksActions.setTasks({ tasks, todolistId }))
     dispatch(appActions.setAppStatus({ status: "succeeded" }))
   })

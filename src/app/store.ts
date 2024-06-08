@@ -2,7 +2,7 @@ import { tasksSlice } from "features/TodolistsList/tasks-slice"
 import { todolistsSlice } from "features/TodolistsList/todolists-slice"
 import { configureStore } from "@reduxjs/toolkit"
 import { appSlice } from "app/app-slice"
-import { authReducer } from "features/Login/auth-reducer"
+import { authSlice } from "features/Login/auth-slice"
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux"
 
 export const store = configureStore({
@@ -10,7 +10,7 @@ export const store = configureStore({
     tasks: tasksSlice,
     todolists: todolistsSlice,
     app: appSlice,
-    auth: authReducer,
+    auth: authSlice,
   },
 })
 

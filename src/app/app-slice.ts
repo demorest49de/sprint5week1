@@ -1,5 +1,5 @@
 import { createSlice, Dispatch, PayloadAction } from "@reduxjs/toolkit"
-import { authActions } from "features/Login/auth-reducer"
+import { authActions } from "features/Login/auth-slice"
 import { authAPI } from "api/todolists-api"
 
 export type RequestStatusType = "idle" | "loading" | "succeeded" | "failed"

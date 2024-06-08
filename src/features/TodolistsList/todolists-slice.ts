@@ -35,25 +35,24 @@ const slice = createSlice({
     },
 
     setTodolists: (state, action: PayloadAction<{ todolists: TodolistType[] }>) => {
-      console.log("setTodolists")
-      console.log("action.payload.todolists", action.payload.todolists)
-
       return action.payload.todolists.map((t) => {
         return { ...t, filter: "all", entityStatus: "idle" }
       })
+    },
+    clearTodolists: () => {
+      return []
     },
   },
 })
 
 // thunks
 export const fetchTodolistsTC = () => {
-  //TODO resolve any!!!
-  return (dispatch: any) => {
+  //TODO resolve any!!! (удаление данных из стора после разлогинивания)
+  return (dispatch: Dispatch<any>) => {
     dispatch(appActions.setAppStatus({ status: "loading" }))
     todolistsAPI
       .getTodolists()
       .then((res) => {
-        console.log("fetchTodolistsTC")
         dispatch(todolistsActions.setTodolists({ todolists: res.data }))
         dispatch(appActions.setAppStatus({ status: "succeeded" }))
         return res.data

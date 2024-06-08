@@ -6,7 +6,7 @@ import { useAppDispatch, useAppSelector } from "./store"
 import { initializeAppTC } from "app/app-slice"
 import { BrowserRouter, Route, Routes } from "react-router-dom"
 import { Login } from "features/Login/Login"
-import { logoutTC } from "features/Login/auth-reducer"
+import { logoutTC } from "features/Login/auth-slice"
 import {
   AppBar,
   Button,
@@ -28,8 +28,6 @@ function App({ demo = false }: PropsType) {
   const isMeLoading = useAppSelector((state) => state.app.isInitialized)
   const isLoggedIn = useAppSelector((state) => state.auth.isLoggedIn)
   const dispatch = useAppDispatch()
-
-  console.log("app")
 
   useEffect(() => {
     dispatch(initializeAppTC())
