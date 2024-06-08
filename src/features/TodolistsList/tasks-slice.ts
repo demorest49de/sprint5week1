@@ -1,9 +1,9 @@
 import { TaskPriorities, TaskStatuses, TaskType, todolistsAPI, UpdateTaskModelType } from "api/todolists-api"
-import { AppRootStateType, AppThunk } from "app/store"
+import { AppRootStateType } from "app/store"
 import { handleServerAppError, handleServerNetworkError } from "utils/error-utils"
 import { createSlice, Dispatch, PayloadAction } from "@reduxjs/toolkit"
-import { appActions } from "app/app-reducer"
-import { todolistsActions } from "features/TodolistsList/todolists-reducer"
+import { appActions } from "app/app-slice"
+import { todolistsActions } from "features/TodolistsList/todolists-slice"
 
 const slice = createSlice({
   name: "tasks",
@@ -50,52 +50,45 @@ const slice = createSlice({
 
 //#region thunks
 
-export const fetchTasksTC =
-  (todolistId: string): AppThunk =>
-  (dispatch: Dispatch) => {
-    dispatch(appActions.setAppStatus({ status: "loading" }))
-    todolistsAPI.getTasks(todolistId).then((res) => {
-      const tasks = res.data.items
-      console.log("tasks", tasks)
-      dispatch(tasksActions.setTasks({ tasks, todolistId }))
-      dispatch(appActions.setAppStatus({ status: "succeeded" }))
+export const fetchTasksTC = (todolistId: string) => (dispatch: Dispatch) => {
+  dispatch(appActions.setAppStatus({ status: "loading" }))
+  todolistsAPI.getTasks(todolistId).then((res) => {
+    const tasks = res.data.items
+    console.log("tasks", tasks)
+    dispatch(tasksActions.setTasks({ tasks, todolistId }))
+    dispatch(appActions.setAppStatus({ status: "succeeded" }))
+  })
+}
+export const removeTaskTC = (taskId: string, todolistId: string) => (dispatch: Dispatch) => {
+  todolistsAPI.deleteTask(todolistId, taskId).then(() => {
+    const action = tasksActions.removeTask({ taskId, todolistId })
+    dispatch(action)
+  })
+}
+export const addTaskTC = (title: string, todolistId: string) => (dispatch: Dispatch) => {
+  dispatch(appActions.setAppStatus({ status: "loading" }))
+  todolistsAPI
+    .createTask(todolistId, title)
+    .then((res) => {
+      if (res.data.resultCode === 0) {
+        const task = res.data.data.item
+        const action = tasksActions.addTask({ task })
+        dispatch(action)
+        dispatch(appActions.setAppStatus({ status: "succeeded" }))
+      } else {
+        handleServerAppError(res.data, dispatch)
+      }
     })
-  }
-export const removeTaskTC =
-  (taskId: string, todolistId: string): AppThunk =>
-  (dispatch) => {
-    todolistsAPI.deleteTask(todolistId, taskId).then(() => {
-      const action = tasksActions.removeTask({ taskId, todolistId })
-      dispatch(action)
+    .catch((error) => {
+      handleServerNetworkError(error, dispatch)
     })
-  }
-export const addTaskTC =
-  (title: string, todolistId: string): AppThunk =>
-  (dispatch) => {
-    dispatch(appActions.setAppStatus({ status: "loading" }))
-    todolistsAPI
-      .createTask(todolistId, title)
-      .then((res) => {
-        if (res.data.resultCode === 0) {
-          const task = res.data.data.item
-          const action = tasksActions.addTask({ task })
-          dispatch(action)
-          dispatch(appActions.setAppStatus({ status: "succeeded" }))
-        } else {
-          handleServerAppError(res.data, dispatch)
-        }
-      })
-      .catch((error) => {
-        handleServerNetworkError(error, dispatch)
-      })
-  }
+}
 export const updateTaskTC =
-  (taskId: string, model: UpdateDomainTaskModelType, todolistId: string): AppThunk =>
-  (dispatch, getState: () => AppRootStateType) => {
+  (taskId: string, model: UpdateDomainTaskModelType, todolistId: string) =>
+  (dispatch: Dispatch, getState: () => AppRootStateType) => {
     const state = getState()
     const task = state.tasks[todolistId].find((t) => t.id === taskId)
     if (!task) {
-      //throw new Error("task not found in the state");
       console.warn("task not found in the state")
       return
     }
@@ -139,5 +132,5 @@ export type TasksStateType = {
 }
 //#endregion
 
-export const tasksReducer = slice.reducer
+export const tasksSlice = slice.reducer
 export const tasksActions = slice.actions

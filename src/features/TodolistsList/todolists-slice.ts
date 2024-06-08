@@ -1,9 +1,8 @@
 import { todolistsAPI, TodolistType } from "api/todolists-api"
 import { createSlice, Dispatch, PayloadAction } from "@reduxjs/toolkit"
-import { appActions, RequestStatusType } from "app/app-reducer"
+import { appActions, RequestStatusType } from "app/app-slice"
 import { handleServerNetworkError } from "utils/error-utils"
-import { AppThunk } from "app/store"
-import { fetchTasksTC, tasksActions } from "features/TodolistsList/tasks-reducer"
+import { fetchTasksTC } from "features/TodolistsList/tasks-slice"
 
 const slice = createSlice({
   name: "todolists",
@@ -47,7 +46,8 @@ const slice = createSlice({
 })
 
 // thunks
-export const fetchTodolistsTC = (): AppThunk => {
+export const fetchTodolistsTC = () => {
+  //TODO resolve any!!!
   return (dispatch: any) => {
     dispatch(appActions.setAppStatus({ status: "loading" }))
     todolistsAPI
@@ -69,8 +69,8 @@ export const fetchTodolistsTC = (): AppThunk => {
   }
 }
 
-export const removeTodolistTC = (todolistId: string): AppThunk => {
-  return (dispatch) => {
+export const removeTodolistTC = (todolistId: string) => {
+  return (dispatch: Dispatch) => {
     dispatch(appActions.setAppStatus({ status: "loading" }))
     dispatch(todolistsActions.changeTodolistEntityStatus({ id: todolistId, status: "loading" }))
     todolistsAPI.deleteTodolist(todolistId).then(() => {
@@ -79,8 +79,8 @@ export const removeTodolistTC = (todolistId: string): AppThunk => {
     })
   }
 }
-export const addTodolistTC = (title: string): AppThunk => {
-  return (dispatch) => {
+export const addTodolistTC = (title: string) => {
+  return (dispatch: Dispatch) => {
     dispatch(appActions.setAppStatus({ status: "loading" }))
     todolistsAPI.createTodolist(title).then((res) => {
       dispatch(todolistsActions.addTodolist({ todolist: res.data.data.item }))
@@ -88,8 +88,8 @@ export const addTodolistTC = (title: string): AppThunk => {
     })
   }
 }
-export const changeTodolistTitleTC = (id: string, title: string): AppThunk => {
-  return (dispatch) => {
+export const changeTodolistTitleTC = (id: string, title: string) => {
+  return (dispatch: Dispatch) => {
     todolistsAPI.updateTodolist(id, title).then(() => {
       dispatch(todolistsActions.changeTodolistTitle({ id: id, title: title }))
     })
@@ -102,5 +102,5 @@ export type TodolistDomainType = TodolistType & {
   entityStatus: RequestStatusType
 }
 
-export const todolistsReducer = slice.reducer
+export const todolistsSlice = slice.reducer
 export const todolistsActions = slice.actions

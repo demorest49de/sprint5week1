@@ -1,7 +1,6 @@
 import { createSlice, Dispatch, PayloadAction } from "@reduxjs/toolkit"
 import { authActions } from "features/Login/auth-reducer"
 import { authAPI } from "api/todolists-api"
-import { AppThunk } from "app/store"
 
 export type RequestStatusType = "idle" | "loading" | "succeeded" | "failed"
 
@@ -25,7 +24,7 @@ const slice = createSlice({
   },
 })
 
-export const initializeAppTC = (): AppThunk => (dispatch) => {
+export const initializeAppTC = () => (dispatch: Dispatch) => {
   authAPI
     .me()
     .then((res) => {
@@ -39,7 +38,7 @@ export const initializeAppTC = (): AppThunk => (dispatch) => {
     })
 }
 
-export const appReducer = slice.reducer
+export const appSlice = slice.reducer
 export const appActions = slice.actions
 
 export type InitialStateType = ReturnType<typeof slice.getInitialState>

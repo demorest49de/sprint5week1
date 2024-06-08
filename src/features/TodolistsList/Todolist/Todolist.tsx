@@ -3,8 +3,7 @@ import { AddItemForm } from "components/AddItemForm/AddItemForm"
 import { EditableSpan } from "components/EditableSpan/EditableSpan"
 import { Task } from "./Task/Task"
 import { TaskStatuses, TaskType } from "api/todolists-api"
-import { FilterValuesType, TodolistDomainType } from "features/TodolistsList/todolists-reducer"
-import { fetchTasks } from "../tasks-reducer"
+import { FilterValuesType, TodolistDomainType } from "features/TodolistsList/todolists-slice"
 import { useAppDispatch } from "hooks/useAppDispatch"
 import { Button, IconButton } from "@mui/material"
 import { Delete } from "@mui/icons-material"
@@ -24,14 +23,6 @@ type PropsType = {
 
 export const Todolist = React.memo(function ({ demo = false, ...props }: PropsType) {
   const dispatch = useAppDispatch()
-
-  // useEffect(() => {
-  //   if (demo) {
-  //     return
-  //   }
-  //   const thunk = fetchTasksTC(props.todolist.id)
-  //   dispatch(thunk)
-  // }, [])
 
   const addTask = useCallback(
     (title: string) => {

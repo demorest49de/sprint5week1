@@ -1,8 +1,7 @@
 import { authAPI, LoginParamsType } from "api/todolists-api"
 import { handleServerAppError, handleServerNetworkError } from "utils/error-utils"
-import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { AppThunk } from "app/store"
-import { appActions } from "app/app-reducer"
+import { createSlice, Dispatch, PayloadAction } from "@reduxjs/toolkit"
+import { appActions } from "app/app-slice"
 
 const slice = createSlice({
   name: "auth",
@@ -17,26 +16,24 @@ const slice = createSlice({
 })
 
 //#region thunks
-export const loginTC =
-  (data: LoginParamsType): AppThunk =>
-  (dispatch) => {
-    dispatch(appActions.setAppStatus({ status: "loading" }))
-    authAPI
-      .login(data)
-      .then((res) => {
-        if (res.data.resultCode === 0) {
-          dispatch(authActions.setIsLoggedIn({ isLoggedIn: true }))
-          dispatch(appActions.setAppStatus({ status: "succeeded" }))
-        } else {
-          handleServerAppError(res.data, dispatch)
-        }
-      })
-      .catch((error) => {
-        handleServerNetworkError(error, dispatch)
-      })
-  }
+export const loginTC = (data: LoginParamsType) => (dispatch: Dispatch) => {
+  dispatch(appActions.setAppStatus({ status: "loading" }))
+  authAPI
+    .login(data)
+    .then((res) => {
+      if (res.data.resultCode === 0) {
+        dispatch(authActions.setIsLoggedIn({ isLoggedIn: true }))
+        dispatch(appActions.setAppStatus({ status: "succeeded" }))
+      } else {
+        handleServerAppError(res.data, dispatch)
+      }
+    })
+    .catch((error) => {
+      handleServerNetworkError(error, dispatch)
+    })
+}
 
-export const logoutTC = (): AppThunk => (dispatch) => {
+export const logoutTC = () => (dispatch: Dispatch) => {
   dispatch(appActions.setAppStatus({ status: "loading" }))
   authAPI
     .logout()
